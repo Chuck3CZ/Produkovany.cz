@@ -23,7 +23,7 @@ Volební šablona pro kandidátku **ProDukovany** – komunální volby 2026.
 
 ### Časté dotazy (`faq`)
 - Přidat přes: **FAQ → Přidat dotaz**
-- Název = otázka, pole **Odpověď** = odpověď (prostý text, max. 650 znaků, s počítadlem)
+- Název = otázka (max. 650 znaků, s počítadlem), obsah v editoru = odpověď (bez omezení, s formátováním)
 - Pořadí: pole **Pořadí** v panelu „Atributy stránky" (menší číslo = výš), jinak podle data přidání
 - Dotazy se zobrazují na samostatné stránce **/faq/** jako rozbalovací akordeon; na hlavní stránce na ni vede tlačítko „Časté dotazy" v hero sekci
 
@@ -80,6 +80,9 @@ v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
 
 ## Changelog
 
+### 1.4.2
+- FAQ: limit 650 znaků platí pro **otázku** (název) – s počítadlem pod polem, hlídá i server
+- Odpověď je opět v běžném editoru, bez omezení délky a s formátováním (tučné, odkazy, seznamy…)
 ### 1.4.1
 - Nová stránka **/aktuality/** se všemi aktualitami (stejné karty jako na hlavní stránce), s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"
 - Tlačítko „Všechny aktuality" na hlavní stránce nyní vede na /aktuality/ (dříve kvůli nenastavené stránce příspěvků odkazovalo na náhodný článek)
