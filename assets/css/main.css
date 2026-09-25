@@ -292,6 +292,23 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   content: '✦'; color: #FADBD8;
   font-size: 12px; margin-top: 5px; flex-shrink: 0;
 }
+.program-more {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease;
+}
+.program-more .program-list { padding-top: 16px; }
+.program-more.open { max-height: 1200px; }
+.program-toggle {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px; padding: 0;
+  background: none; border: none;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  color: #FADBD8; cursor: pointer;
+}
+.program-toggle:hover { color: #fff; }
+.program-toggle-arrow { display: inline-block; transition: transform .3s ease; }
+.program-toggle[aria-expanded="true"] .program-toggle-arrow { transform: rotate(180deg); }
 .program-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .stat-box {
   background: rgba(255,255,255,.08);
@@ -316,12 +333,35 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   gap: 24px; margin-top: 48px;
 }
 .candidate-card {
+  display: flex; flex-direction: column;
   border-radius: var(--radius); overflow: hidden;
   border: 1px solid var(--border);
   transition: box-shadow .25s, transform .25s; text-align: center;
   background: #fff;
 }
 .candidate-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.1); transform: translateY(-3px); }
+.candidate-more {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; margin: auto auto 20px;
+  border-radius: 999px; flex-shrink: 0; overflow: hidden; white-space: nowrap;
+  background: var(--red); color: #fff;
+  text-decoration: none; transition: width .3s ease, background .2s;
+}
+.candidate-more-icon {
+  font-size: 18px; line-height: 1;
+  transition: opacity .1s ease;
+}
+.candidate-more-label {
+  position: absolute; left: 0; right: 0; text-align: center;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  opacity: 0; transition: opacity .15s ease;
+}
+.candidate-more:hover {
+  width: 140px; background: var(--blue);
+}
+.candidate-more:hover .candidate-more-icon { opacity: 0; }
+.candidate-more:hover .candidate-more-label { opacity: 1; transition-delay: .15s; }
 .candidate-photo {
   height: 200px; overflow: hidden;
   background: linear-gradient(135deg, var(--blue), #0D2E45);
@@ -365,8 +405,10 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   background: #fff; border-radius: var(--radius);
   overflow: hidden; border: 1px solid var(--border);
   transition: box-shadow .25s;
+  position: relative;
 }
 .news-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.1); }
+.news-card:hover .news-body h3 a { color: var(--red); }
 .news-thumb {
   height: 160px; overflow: hidden;
   background: linear-gradient(135deg, var(--blue), #0D2E45);
@@ -384,7 +426,7 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   font-size: 1.05rem; margin-bottom: 10px; line-height: 1.35;
 }
 .news-body h3 a { text-decoration: none; color: var(--dark); }
-.news-body h3 a:hover { color: var(--red); }
+.news-body h3 a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .news-body p  { color: var(--gray); font-size: 14px; line-height: 1.6; }
 .news-date    { font-size: 12px; color: var(--gray); margin-top: 16px; }
 
@@ -532,6 +574,9 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
 
 /* ── Single post / page ── */
 .page-single, .page-static { padding: 60px 0 90px; }
+.single-post .wp-post-image {
+    display: none;
+}
 .entry-header  { margin-bottom: 32px; }
 .entry-title   { font-size: clamp(1.8rem,4vw,3rem); margin-bottom: 12px; }
 .entry-meta    { color: var(--gray); font-size: 14px; }

@@ -100,4 +100,17 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(updateCountdown, 60000);
   }
 
+  // ── Accordion pro body volebního programu ───────────
+  document.querySelectorAll('.program-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const panel = document.getElementById(this.getAttribute('aria-controls'));
+      if (!panel) return;
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', !expanded);
+      panel.classList.toggle('open', !expanded);
+      const label = this.querySelector('.program-toggle-text');
+      if (label) label.textContent = expanded ? 'Zjistit více' : 'Zobrazit méně';
+    });
+  });
+
 });

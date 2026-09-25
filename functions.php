@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.3.4' );
+define( 'PRODUKOVANY_VERSION', '1.3.9' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -198,6 +198,53 @@ function produkovany_save_kandidat_meta( $post_id ) {
         update_post_meta( $post_id, '_kandidat_povolani', sanitize_text_field( $_POST['kandidat_povolani'] ) );
 }
 add_action( 'save_post_kandidat', 'produkovany_save_kandidat_meta' );
+
+// ── Admin sloupec: Pořadí kandidáta (pro kontrolu a řazení v seznamu) ───────
+function produkovany_kandidat_columns( $columns ) {
+    $columns['kandidat_order'] = __( 'Pořadí', 'produkovany' );
+    return $columns;
+}
+add_filter( 'manage_kandidat_posts_columns', 'produkovany_kandidat_columns' );
+
+function produkovany_kandidat_column_content( $column, $post_id ) {
+    if ( $column === 'kandidat_order' ) {
+        $order = get_post_meta( $post_id, '_kandidat_order', true );
+        echo ( $order !== '' ) ? absint( $order ) : '—';
+    }
+}
+add_action( 'manage_kandidat_posts_custom_column', 'produkovany_kandidat_column_content', 10, 2 );
+
+function produkovany_kandidat_sortable_columns( $columns ) {
+    $columns['kandidat_order'] = 'kandidat_order';
+    return $columns;
+}
+add_filter( 'manage_edit-kandidat_sortable_columns', 'produkovany_kandidat_sortable_columns' );
+
+function produkovany_kandidat_orderby( $query ) {
+    if ( ! is_admin() || ! $query->is_main_query() ) return;
+    if ( $query->get( 'orderby' ) === 'kandidat_order' ) {
+        $query->set( 'meta_key', '_kandidat_order' );
+        $query->set( 'orderby', 'meta_value_num' );
+    }
+}
+add_action( 'pre_get_posts', 'produkovany_kandidat_orderby' );
+
+// ── Pořadí kandidátů pro navigaci předchozí/další na jejich stránce ─────────
+function produkovany_get_kandidat_siblings() {
+    static $ids = null;
+    if ( $ids === null ) {
+        $q = new WP_Query([
+            'post_type'      => 'kandidat',
+            'posts_per_page' => -1,
+            'meta_key'       => '_kandidat_order',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'ASC',
+            'fields'         => 'ids',
+        ]);
+        $ids = $q->posts;
+    }
+    return $ids;
+}
 
 // ── Customizer ──────────────────────────────────────────────────────────────
 function produkovany_customizer( $wp_customize ) {

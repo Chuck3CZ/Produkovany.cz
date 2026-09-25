@@ -23,6 +23,7 @@
       <div class="hero-btns">
         <a href="#program" class="btn btn-primary"><?php _e('Náš program', 'produkovany'); ?></a>
         <a href="#kandidati" class="btn btn-outline"><?php _e('Poznejte nás', 'produkovany'); ?></a>
+        <a href="#aktuality" class="btn btn-outline"><?php _e('Aktuality', 'produkovany'); ?></a>
       </div>
     </div>
   </section>
@@ -91,7 +92,101 @@
   <section class="program-section section" id="program">
     <div class="container">
       <div class="section-label" style="color:#FADBD8">Volební program</div>
-      <h2 class="section-title" style="color:#fff; max-width:100%">Aktuálně program doručujeme ve fyzické podobě, později bude přidán i zde na stránky</h2>
+      <h2 class="section-title" style="color:#fff; max-width:100%">Co konkrétně chceme pro Dukovany</h2>
+
+      <div class="program-detail-grid">
+
+        <div class="program-category">
+          <div class="program-cat-header">
+            <span class="program-cat-icon">📢</span>
+            <h3>1. Transparentnost a komunikace</h3>
+          </div>
+          <ul class="program-list">
+            <li>Naprosto transparentní hospodaření obce</li>
+            <li>Řádnou a včasnou informovanost občanů o dění v obci a plánovaných záměrech obce</li>
+            <li>Modernizaci a zefektivnění správy obce</li>
+            <li>O rovný a spravedlivý přístup ke všem občanům při vyřizování jejich žádostí a požadavků</li>
+          </ul>
+        </div>
+
+        <div class="program-category">
+          <div class="program-cat-header">
+            <span class="program-cat-icon">🚧</span>
+            <h3>2. Doprava a infrastruktura</h3>
+          </div>
+          <ul class="program-list">
+            <li>Vybudování asfaltového parkoviště před obchodem s rozšířením směrem ke vstupu na fotbalové hřiště a nahrazení hliněné stezky pod topoly regulérním chodníkem</li>
+            <li>Zajištění bezplatného připojení k teplovodu pro novou zástavbu i pro majitele nemovitostí, kteří se dříve odmítli připojit a teď by o to měli zájem</li>
+            <li>Takovou cenotvorbu tepla, aby byli občané motivováni k připojení k teplovodu, popřípadě ho více využívat</li>
+            <li>Celkovou opravu místní komunikace od zámku směrem k objektu bývalého kravína včetně vybudování chodníku</li>
+          </ul>
+          <div class="program-more" id="program-more-2">
+            <ul class="program-list">
+              <li>Vyasfaltování dnes hliněné komunikace od objektu SEDUK k fotbalovému hřišti pro cyklo/pěší a dopravní obsluhu pozemků rezidentů</li>
+              <li>Rozšíření poloměru zpevněného povrchu na sokolské louce, abychom se při společenských akcích nebrodili v blátě</li>
+              <li>Rekonstrukci toalet v Sokolovně</li>
+              <li>Zefektivnění plánování a provádění údržby v obci, aby nedocházelo ke znehodnocení investic do obecní infrastruktury</li>
+              <li>Dodržování územního plánu obce, aby nebyl narušen celkový ráz/vzhled obce nepatřičnou zástavbou</li>
+              <li>Zrychlení internetového připojení domácnostem</li>
+              <li>Zajištění instalace AlzaBoxu v obci, který díky spolupráci s Balíkovnou rozšíří možnosti vyzvedávání zásilek i mimo omezenou otevírací dobu místní pošty</li>
+            </ul>
+          </div>
+          <button type="button" class="program-toggle" aria-expanded="false" aria-controls="program-more-2">
+            <span class="program-toggle-text">Zjistit více</span>
+            <span class="program-toggle-arrow" aria-hidden="true">▾</span>
+          </button>
+        </div>
+
+        <div class="program-category">
+          <div class="program-cat-header">
+            <span class="program-cat-icon">🏘️</span>
+            <h3>3. Rozvoj obce a služby</h3>
+          </div>
+          <ul class="program-list">
+            <li>Výstavbu dostupných obecních bytů pro mladé rodiny</li>
+            <li>Modernizaci zázemí školy a školky a zvýšení úrovně vzdělávání</li>
+            <li>Rozšíření péče o seniory (např. senior taxi) a ubytovacích prostor s pečovatelskou službou</li>
+            <li>Vyšší podporu zájmových spolků, které pracují s dětmi, a jejich činnosti</li>
+          </ul>
+          <div class="program-more" id="program-more-3">
+            <ul class="program-list">
+              <li>Rozšíření výběru zájmových kroužků, které mohou děti navštěvovat, např. o tenis a plavání</li>
+              <li>Výběr kvalitního a spolehlivého provozovatele restaurace v majetku obce</li>
+              <li>Výstavbu prostor pro služby v oblasti zdravotnictví, maloobchodu a dalších, které se v obci momentálně nenacházejí, a motivaci podnikatelských subjektů, aby tyto služby v obci poskytovaly</li>
+              <li>Zajištění modernizace posilovny</li>
+              <li>Zajištění stálé obsluhy a údržby všech sportovišť</li>
+            </ul>
+          </div>
+          <button type="button" class="program-toggle" aria-expanded="false" aria-controls="program-more-3">
+            <span class="program-toggle-text">Zjistit více</span>
+            <span class="program-toggle-arrow" aria-hidden="true">▾</span>
+          </button>
+        </div>
+
+        <div class="program-category">
+          <div class="program-cat-header">
+            <span class="program-cat-icon">🛡️</span>
+            <h3>4. Bezpečnost v obci</h3>
+          </div>
+          <ul class="program-list">
+            <li>Instalaci radarů s úsekovým měřením na všechny silniční vjezdy a výjezdy do/z obce a instalaci zpomalovacího semaforu na přechodu u školy</li>
+            <li>Získání statusu obce s částečnou přenesenou působností v oblasti dopravy, aby obec mohla efektivněji zajistit dodržování silničního zákona na obecních komunikacích</li>
+            <li>Rozšíření obytné zóny z lokality „Holandsko“ o lokalitu „Podevsí“ a obytnou lokalitu u zámecké zdi s cílem zajistit přednost chodců (dětí) před automobily</li>
+            <li>Vedení dialogu s vlastníky pozemků, krajem a ČEZ a. s. za účelem výstavby cyklostezky na trase Jamolice-Dukovany-EDU a kruhového objezdu u čerpací stanice</li>
+          </ul>
+          <div class="program-more" id="program-more-4">
+            <ul class="program-list">
+              <li>Vybudování infrastruktury pro systém zabezpečení obce</li>
+              <li>Vybudování zázemí pro agenturního bezpečnostního pracovníka a obecní policii, která bude (dočasně) zřízena v případě zhoršení bezpečnostní situace v obci během výstavby EDU II</li>
+            </ul>
+          </div>
+          <button type="button" class="program-toggle" aria-expanded="false" aria-controls="program-more-4">
+            <span class="program-toggle-text">Zjistit více</span>
+            <span class="program-toggle-arrow" aria-hidden="true">▾</span>
+          </button>
+        </div>
+
+      </div>
 
       <div class="program-stats" style="margin-top:56px">
         <div class="stat-box">
@@ -132,8 +227,9 @@
         ]);
         if ( $kandidati->have_posts() ) :
           while ( $kandidati->have_posts() ) : $kandidati->the_post();
-            $order    = get_post_meta(get_the_ID(), '_kandidat_order',    true);
-            $povolani = get_post_meta(get_the_ID(), '_kandidat_povolani', true);
+            $order      = get_post_meta(get_the_ID(), '_kandidat_order',    true);
+            $povolani   = get_post_meta(get_the_ID(), '_kandidat_povolani', true);
+            $has_popis  = trim( wp_strip_all_tags( get_the_content() ) ) !== '';
         ?>
         <div class="candidate-card">
           <div class="candidate-photo">
@@ -152,6 +248,12 @@
               <p class="candidate-povolani"><?php echo esc_html($povolani); ?></p>
             <?php endif; ?>
           </div>
+          <?php if ($has_popis) : ?>
+          <a href="<?php the_permalink(); ?>" class="candidate-more" aria-label="<?php echo esc_attr( sprintf( __('Zjistit více o %s', 'produkovany'), get_the_title() ) ); ?>">
+            <span class="candidate-more-icon" aria-hidden="true">&darr;</span>
+            <span class="candidate-more-label" aria-hidden="true"><?php _e('Zjistit více', 'produkovany'); ?></span>
+          </a>
+          <?php endif; ?>
         </div>
         <?php endwhile; wp_reset_postdata(); endif; ?>
       </div>

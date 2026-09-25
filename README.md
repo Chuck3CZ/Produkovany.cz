@@ -69,7 +69,7 @@ produkovany-theme/
 
 ## Changelog
 
-### 1.3.4
+### 1.3.9
 - Nová záložka **FAQ** v administraci (custom post type `faq`)
 - Sekce „Časté dotazy" (`#faq`) nad kontaktem — otázky jako rozbalovací akordeon, odpověď se ukáže po kliknutí
 - Pořadí otázek přes pole „Pořadí" (Atributy stránky); bez dotazů se sekce nezobrazí
