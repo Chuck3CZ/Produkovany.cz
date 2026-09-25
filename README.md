@@ -23,9 +23,9 @@ Volební šablona pro kandidátku **ProDukovany** – komunální volby 2026.
 
 ### Časté dotazy (`faq`)
 - Přidat přes: **FAQ → Přidat dotaz**
-- Název = otázka, obsah = odpověď (zobrazí se po rozkliknutí)
+- Název = otázka, pole **Odpověď** = odpověď (prostý text, max. 650 znaků, s počítadlem)
 - Pořadí: pole **Pořadí** v panelu „Atributy stránky" (menší číslo = výš), jinak podle data přidání
-- Sekce se zobrazí nad kontaktem jen pokud existuje alespoň jeden publikovaný dotaz
+- Dotazy se zobrazují na samostatné stránce **/faq/** jako rozbalovací akordeon; na hlavní stránce na ni vede tlačítko „Časté dotazy" v hero sekci
 
 ## Přizpůsobení (Customizer)
 
@@ -68,6 +68,13 @@ produkovany-theme/
 ```
 
 ## Changelog
+
+### 1.4.0
+- FAQ přesunuto na samostatnou stránku **/faq/** (šablona `archive-faq.php`) s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"
+- Na hlavní stránce místo sekce FAQ tlačítko „Časté dotazy" vedle „Náš program", „Poznejte nás", „Aktuality"
+- Odpověď se zadává do pole s limitem 650 znaků a živým počítadlem (limit hlídá i server)
+- Tlačítko „Podpořte nás" v hlavičce funguje i z podstránek (vede na /#kontakt)
+- Permalinky se po aktualizaci šablony obnoví automaticky
 
 ### 1.3.9
 - Nová záložka **FAQ** v administraci (custom post type `faq`)

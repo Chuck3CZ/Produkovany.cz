@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.3.9' );
+define( 'PRODUKOVANY_VERSION', '1.4.0' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -147,11 +147,13 @@ function produkovany_register_cpt() {
             'edit_item'     => __( 'Upravit dotaz', 'produkovany' ),
             'menu_name'     => __( 'FAQ', 'produkovany' ),
         ],
-        'public'       => false,
-        'show_ui'      => true,
-        'show_in_rest' => true,
-        'supports'     => [ 'title', 'editor', 'page-attributes' ],
-        'menu_icon'    => 'dashicons-editor-help',
+        'public'              => true,
+        'exclude_from_search' => true,
+        'show_in_rest'        => false, // klasický editor – odpověď je prostý text s limitem znaků
+        'has_archive'         => true,
+        'rewrite'             => [ 'slug' => 'faq', 'with_front' => false ],
+        'supports'            => [ 'title', 'page-attributes' ],
+        'menu_icon'           => 'dashicons-editor-help',
     ]);
 }
 add_action( 'init', 'produkovany_register_cpt' );
@@ -245,6 +247,74 @@ function produkovany_get_kandidat_siblings() {
     }
     return $ids;
 }
+
+// ── FAQ: odpověď (max. 650 znaků) ───────────────────────────────────────────
+define( 'PRODUKOVANY_FAQ_MAX', 650 );
+
+// Po aktualizaci šablony obnoví permalinky, aby fungovala adresa /faq/
+function produkovany_maybe_flush_rewrites() {
+    if ( get_option( 'produkovany_rewrite_version' ) !== PRODUKOVANY_VERSION ) {
+        flush_rewrite_rules();
+        update_option( 'produkovany_rewrite_version', PRODUKOVANY_VERSION );
+    }
+}
+add_action( 'init', 'produkovany_maybe_flush_rewrites', 20 );
+
+function produkovany_faq_meta_box() {
+    add_meta_box(
+        'faq_answer',
+        __( 'Odpověď', 'produkovany' ),
+        'produkovany_faq_meta_html',
+        'faq',
+        'normal',
+        'high'
+    );
+}
+add_action( 'add_meta_boxes', 'produkovany_faq_meta_box' );
+
+function produkovany_faq_meta_html( $post ) {
+    $answer = wp_strip_all_tags( $post->post_content );
+    ?>
+    <textarea name="content" id="faq-answer" rows="8" maxlength="<?php echo PRODUKOVANY_FAQ_MAX; ?>" style="width:100%"><?php echo esc_textarea( $answer ); ?></textarea>
+    <p style="color:#888;font-size:12px;margin:6px 0 0">
+        <span id="faq-answer-count"><?php echo mb_strlen( $answer ); ?></span> / <?php echo PRODUKOVANY_FAQ_MAX; ?> znaků
+        &nbsp;·&nbsp; 💡 Otázka = název, pořadí = „Atributy stránky → Pořadí“ (menší číslo = výš)
+    </p>
+    <script>
+    (function () {
+        var t = document.getElementById('faq-answer'), c = document.getElementById('faq-answer-count');
+        t.addEventListener('input', function () { c.textContent = t.value.length; });
+    })();
+    </script>
+    <?php
+}
+
+// Pojistka na straně serveru – odpověď se uloží jako prostý text, nejvýše 650 znaků
+function produkovany_faq_limit_answer( $data ) {
+    if ( $data['post_type'] === 'faq' ) {
+        $answer = trim( wp_strip_all_tags( wp_unslash( $data['post_content'] ) ) );
+        $data['post_content'] = wp_slash( mb_substr( $answer, 0, PRODUKOVANY_FAQ_MAX ) );
+    }
+    return $data;
+}
+add_filter( 'wp_insert_post_data', 'produkovany_faq_limit_answer' );
+
+// Stránka /faq/ – všechny dotazy podle pořadí
+function produkovany_faq_archive_query( $query ) {
+    if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'faq' ) ) return;
+    $query->set( 'posts_per_page', -1 );
+    $query->set( 'orderby', [ 'menu_order' => 'ASC', 'date' => 'ASC' ] );
+}
+add_action( 'pre_get_posts', 'produkovany_faq_archive_query' );
+
+// Jednotlivé dotazy nemají vlastní stránku – přesměruj na /faq/
+function produkovany_faq_redirect_single() {
+    if ( is_singular( 'faq' ) ) {
+        wp_safe_redirect( get_post_type_archive_link( 'faq' ) . '#faq-' . get_queried_object_id(), 301 );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'produkovany_faq_redirect_single' );
 
 // ── Customizer ──────────────────────────────────────────────────────────────
 function produkovany_customizer( $wp_customize ) {
