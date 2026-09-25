@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.4.1' );
+define( 'PRODUKOVANY_VERSION', '1.4.2' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -149,10 +149,10 @@ function produkovany_register_cpt() {
         ],
         'public'              => true,
         'exclude_from_search' => true,
-        'show_in_rest'        => false, // klasický editor – odpověď je prostý text s limitem znaků
+        'show_in_rest'        => false, // klasický editor – kvůli limitu znaků u otázky
         'has_archive'         => true,
         'rewrite'             => [ 'slug' => 'faq', 'with_front' => false ],
-        'supports'            => [ 'title', 'page-attributes' ],
+        'supports'            => [ 'title', 'editor', 'page-attributes' ],
         'menu_icon'           => 'dashicons-editor-help',
     ]);
 }
@@ -292,7 +292,7 @@ function produkovany_aktuality_title( $title ) {
 }
 add_filter( 'document_title_parts', 'produkovany_aktuality_title' );
 
-// ── FAQ: odpověď (max. 650 znaků) ───────────────────────────────────────────
+// ── FAQ: otázka (název) max. 650 znaků, odpověď bez omezení ────────────────
 define( 'PRODUKOVANY_FAQ_MAX', 650 );
 
 // Po aktualizaci šablony obnoví permalinky, aby fungovala adresa /faq/
@@ -304,44 +304,40 @@ function produkovany_maybe_flush_rewrites() {
 }
 add_action( 'init', 'produkovany_maybe_flush_rewrites', 20 );
 
-function produkovany_faq_meta_box() {
-    add_meta_box(
-        'faq_answer',
-        __( 'Odpověď', 'produkovany' ),
-        'produkovany_faq_meta_html',
-        'faq',
-        'normal',
-        'high'
-    );
-}
-add_action( 'add_meta_boxes', 'produkovany_faq_meta_box' );
-
-function produkovany_faq_meta_html( $post ) {
-    $answer = wp_strip_all_tags( $post->post_content );
+// Počítadlo znaků a limit u pole otázky v administraci
+function produkovany_faq_title_limit_js() {
+    $screen = get_current_screen();
+    if ( ! $screen || $screen->post_type !== 'faq' || $screen->base !== 'post' ) return;
     ?>
-    <textarea name="content" id="faq-answer" rows="8" maxlength="<?php echo PRODUKOVANY_FAQ_MAX; ?>" style="width:100%"><?php echo esc_textarea( $answer ); ?></textarea>
-    <p style="color:#888;font-size:12px;margin:6px 0 0">
-        <span id="faq-answer-count"><?php echo mb_strlen( $answer ); ?></span> / <?php echo PRODUKOVANY_FAQ_MAX; ?> znaků
-        &nbsp;·&nbsp; 💡 Otázka = název, pořadí = „Atributy stránky → Pořadí“ (menší číslo = výš)
-    </p>
     <script>
     (function () {
-        var t = document.getElementById('faq-answer'), c = document.getElementById('faq-answer-count');
-        t.addEventListener('input', function () { c.textContent = t.value.length; });
+        var t = document.getElementById('title');
+        if (!t) return;
+        t.setAttribute('maxlength', <?php echo PRODUKOVANY_FAQ_MAX; ?>);
+        var c = document.createElement('p');
+        c.style.cssText = 'color:#888;font-size:12px;margin:6px 0 0';
+        t.parentNode.parentNode.insertBefore(c, t.parentNode.nextSibling);
+        function update() { c.textContent = 'Otázka: ' + t.value.length + ' / <?php echo PRODUKOVANY_FAQ_MAX; ?> znaků · odpověď pište do editoru níže (bez omezení)'; }
+        t.addEventListener('input', update);
+        update();
     })();
     </script>
     <?php
 }
+add_action( 'admin_footer-post.php',     'produkovany_faq_title_limit_js' );
+add_action( 'admin_footer-post-new.php', 'produkovany_faq_title_limit_js' );
 
-// Pojistka na straně serveru – odpověď se uloží jako prostý text, nejvýše 650 znaků
-function produkovany_faq_limit_answer( $data ) {
+// Pojistka na straně serveru – otázka se zkrátí na 650 znaků
+function produkovany_faq_limit_title( $data ) {
     if ( $data['post_type'] === 'faq' ) {
-        $answer = trim( wp_strip_all_tags( wp_unslash( $data['post_content'] ) ) );
-        $data['post_content'] = wp_slash( mb_substr( $answer, 0, PRODUKOVANY_FAQ_MAX ) );
+        $title = wp_unslash( $data['post_title'] );
+        if ( mb_strlen( $title ) > PRODUKOVANY_FAQ_MAX ) {
+            $data['post_title'] = wp_slash( mb_substr( $title, 0, PRODUKOVANY_FAQ_MAX ) );
+        }
     }
     return $data;
 }
-add_filter( 'wp_insert_post_data', 'produkovany_faq_limit_answer' );
+add_filter( 'wp_insert_post_data', 'produkovany_faq_limit_title' );
 
 // Stránka /faq/ – všechny dotazy podle pořadí
 function produkovany_faq_archive_query( $query ) {
