@@ -485,11 +485,11 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
 .faq-question:hover { color: var(--red); }
 .faq-answer {
   padding: 0 24px 20px;
-  color: var(--gray); font-size: 15px; line-height: 1.7;
+  color: #444; font-size: 17px; line-height: 1.7;
 }
 .faq-answer > *:first-child { margin-top: 0; }
 .faq-answer > *:last-child  { margin-bottom: 0; }
-.faq-answer p { margin: 0 0 12px; }
+.faq-answer p { margin: 0 0 14px; }
 .faq-answer p:empty { display: none; }
 
 /* ── Kontakt ── */
@@ -695,7 +695,7 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
 
   /* FAQ */
   .faq-question   { padding: 16px 18px; font-size: 1rem; }
-  .faq-answer     { padding: 0 18px 16px; font-size: 14px; }
+  .faq-answer     { padding: 0 18px 16px; font-size: 16px; }
   .page-faq, .page-aktuality { padding: 20px 0 60px; }
   .back-link      { margin-bottom: 24px; }
 

@@ -80,6 +80,8 @@ v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
 
 ## Changelog
 
+### 1.4.4
+- FAQ: větší a lépe čitelný text odpovědí (17 px na PC, 16 px na mobilu, tmavší šedá)
 ### 1.4.3
 - FAQ: opraveno rozdělení otázky do dvou sloupců, když začíná emoji (WordPress emoji mění na `<img>`, které se ve flexboxu chovalo jako samostatný blok) – text otázky je nyní v jednom `<span>`
 - Prázdné odstavce na konci odpovědi se nezobrazují
