@@ -80,6 +80,9 @@ v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
 
 ## Changelog
 
+### 1.4.3
+- FAQ: opraveno rozdělení otázky do dvou sloupců, když začíná emoji (WordPress emoji mění na `<img>`, které se ve flexboxu chovalo jako samostatný blok) – text otázky je nyní v jednom `<span>`
+- Prázdné odstavce na konci odpovědi se nezobrazují
 ### 1.4.2
 - FAQ: limit 650 znaků platí pro **otázku** (název) – s počítadlem pod polem, hlídá i server
 - Odpověď je opět v běžném editoru, bez omezení délky a s formátováním (tučné, odkazy, seznamy…)

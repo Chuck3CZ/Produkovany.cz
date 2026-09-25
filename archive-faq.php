@@ -13,7 +13,7 @@
   <div class="faq-list">
     <?php while ( have_posts() ) : the_post(); ?>
     <details class="faq-item" id="faq-<?php the_ID(); ?>">
-      <summary class="faq-question"><?php the_title(); ?></summary>
+      <summary class="faq-question"><span class="faq-question-text"><?php the_title(); ?></span></summary>
       <div class="faq-answer"><?php the_content(); ?></div>
     </details>
     <?php endwhile; ?>

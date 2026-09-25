@@ -472,6 +472,7 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   font-size: 1.1rem; line-height: 1.35; color: var(--dark);
 }
 .faq-question::-webkit-details-marker { display: none; }
+.faq-question-text { flex: 1; min-width: 0; overflow-wrap: break-word; }
 .faq-question::after {
   content: '+'; flex-shrink: 0;
   width: 30px; height: 30px; border-radius: 50%;
@@ -489,6 +490,7 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
 .faq-answer > *:first-child { margin-top: 0; }
 .faq-answer > *:last-child  { margin-bottom: 0; }
 .faq-answer p { margin: 0 0 12px; }
+.faq-answer p:empty { display: none; }
 
 /* ── Kontakt ── */
 .contact-section { background: var(--white); }
