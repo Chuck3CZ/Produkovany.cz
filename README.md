@@ -70,6 +70,14 @@ produkovany-theme/
 └── README.md
 ```
 
+## Vydání (GitHub Releases)
+
+Po každém pushi do `main` workflow `.github/workflows/release.yml` zkontroluje
+`Version:` v `style.css`. Pokud release `vX.Y.Z` ještě neexistuje, sestaví
+`produkovany-theme-X.Y.Z.zip` (instalovatelný přes **Vzhled → Témata → Nahrát**)
+a vytvoří release s poznámkami z changelogu níže. Stačí tedy zvednout verzi
+v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
+
 ## Changelog
 
 ### 1.4.1
