@@ -21,6 +21,12 @@ Volební šablona pro kandidátku **ProDukovany** – komunální volby 2026.
 - V obsahu napiš krátký popis (zobrazí se jako excerpt)
 - Meta: `_pillar_icon` = emoji ikona, `_pillar_color` = CSS barva
 
+### Časté dotazy (`faq`)
+- Přidat přes: **FAQ → Přidat dotaz**
+- Název = otázka, pole **Odpověď** = odpověď (prostý text, max. 650 znaků, s počítadlem)
+- Pořadí: pole **Pořadí** v panelu „Atributy stránky" (menší číslo = výš), jinak podle data přidání
+- Dotazy se zobrazují na samostatné stránce **/faq/** jako rozbalovací akordeon; na hlavní stránce na ni vede tlačítko „Časté dotazy" v hero sekci
+
 ## Přizpůsobení (Customizer)
 
 **Vzhled → Přizpůsobit:**
@@ -55,13 +61,41 @@ produkovany-theme/
 ├── single.php         # Jednotlivý příspěvek
 ├── page.php           # Statická stránka
 ├── archive.php        # Archiv příspěvků
+├── archive-faq.php    # Stránka /faq/
+├── aktuality.php      # Stránka /aktuality/
+├── template-parts/news-card.php  # Karta aktuality
 ├── assets/
 │   ├── css/main.css   # Všechny styly
 │   └── js/main.js     # Interaktivita
 └── README.md
 ```
 
+## Vydání (GitHub Releases)
+
+Po každém pushi do `main` workflow `.github/workflows/release.yml` zkontroluje
+`Version:` v `style.css`. Pokud release `vX.Y.Z` ještě neexistuje, sestaví
+`produkovany-theme-X.Y.Z.zip` (instalovatelný přes **Vzhled → Témata → Nahrát**)
+a vytvoří release s poznámkami z changelogu níže. Stačí tedy zvednout verzi
+v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
+
 ## Changelog
+
+### 1.4.1
+- Nová stránka **/aktuality/** se všemi aktualitami (stejné karty jako na hlavní stránce), s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"
+- Tlačítko „Všechny aktuality" na hlavní stránce nyní vede na /aktuality/ (dříve kvůli nenastavené stránce příspěvků odkazovalo na náhodný článek)
+- Karta aktuality vyčleněna do `template-parts/news-card.php` – hlavní stránka i přehled používají stejný kód
+
+### 1.4.0
+- FAQ přesunuto na samostatnou stránku **/faq/** (šablona `archive-faq.php`) s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"
+- Na hlavní stránce místo sekce FAQ tlačítko „Časté dotazy" vedle „Náš program", „Poznejte nás", „Aktuality"
+- Odpověď se zadává do pole s limitem 650 znaků a živým počítadlem (limit hlídá i server)
+- Tlačítko „Podpořte nás" v hlavičce funguje i z podstránek (vede na /#kontakt)
+- Permalinky se po aktualizaci šablony obnoví automaticky
+
+### 1.3.9
+- Nová záložka **FAQ** v administraci (custom post type `faq`)
+- Sekce „Časté dotazy" (`#faq`) nad kontaktem — otázky jako rozbalovací akordeon, odpověď se ukáže po kliknutí
+- Pořadí otázek přes pole „Pořadí" (Atributy stránky); bez dotazů se sekce nezobrazí
 
 ### 1.2.9
 - Pole E-mail odstraněno z formuláře — zpráva dorazí i bez něj

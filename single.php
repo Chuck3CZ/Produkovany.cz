@@ -24,12 +24,6 @@
       </div>
     </header>
 
-    <?php if ( has_post_thumbnail() ) : ?>
-    <div class="entry-thumbnail">
-      <?php the_post_thumbnail('produkovany-hero'); ?>
-    </div>
-    <?php endif; ?>
-
     <div class="entry-content">
       <?php
       the_content();
@@ -53,12 +47,27 @@
   </article>
 
   <nav class="post-navigation">
-    <?php
-    the_post_navigation([
-      'prev_text' => '← %title',
-      'next_text' => '%title →',
-    ]);
+    <?php if ( get_post_type() === 'kandidat' ) :
+      $kandidat_ids = produkovany_get_kandidat_siblings();
+      $kandidat_pos = array_search( get_the_ID(), $kandidat_ids, true );
+      $prev_id = ( $kandidat_pos !== false && $kandidat_pos > 0 ) ? $kandidat_ids[ $kandidat_pos - 1 ] : 0;
+      $next_id = ( $kandidat_pos !== false && $kandidat_pos < count( $kandidat_ids ) - 1 ) ? $kandidat_ids[ $kandidat_pos + 1 ] : 0;
+      if ( $prev_id || $next_id ) :
     ?>
+      <div class="nav-links">
+        <?php if ( $prev_id ) : ?>
+          <div class="nav-previous"><a href="<?php echo esc_url( get_permalink( $prev_id ) ); ?>">&larr; <?php echo esc_html( get_the_title( $prev_id ) ); ?></a></div>
+        <?php endif; ?>
+        <?php if ( $next_id ) : ?>
+          <div class="nav-next"><a href="<?php echo esc_url( get_permalink( $next_id ) ); ?>"><?php echo esc_html( get_the_title( $next_id ) ); ?> &rarr;</a></div>
+        <?php endif; ?>
+      </div>
+    <?php endif; else :
+      the_post_navigation([
+        'prev_text' => '← %title',
+        'next_text' => '%title →',
+      ]);
+    endif; ?>
   </nav>
 
   <?php endwhile; ?>

@@ -59,6 +59,6 @@
       ]);
       endif; ?>
 
-      <a href="#kontakt" class="btn btn-primary nav-cta">Podpořte nás</a>
+      <a href="<?php echo is_front_page() ? '#kontakt' : esc_url( home_url( '/#kontakt' ) ); ?>" class="btn btn-primary nav-cta">Podpořte nás</a>
     </nav>
   </header><!-- #masthead -->

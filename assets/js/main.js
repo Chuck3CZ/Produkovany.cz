@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Scroll animace (Intersection Observer) ──────────
   const animTargets = document.querySelectorAll(
-    '.pillar-card, .candidate-card, .news-card, .stat-box, .contact-item'
+    '.pillar-card, .candidate-card, .news-card, .stat-box, .contact-item, .faq-item'
   );
 
   if ('IntersectionObserver' in window) {
@@ -99,5 +99,18 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCountdown();
     setInterval(updateCountdown, 60000);
   }
+
+  // ── Accordion pro body volebního programu ───────────
+  document.querySelectorAll('.program-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const panel = document.getElementById(this.getAttribute('aria-controls'));
+      if (!panel) return;
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', !expanded);
+      panel.classList.toggle('open', !expanded);
+      const label = this.querySelector('.program-toggle-text');
+      if (label) label.textContent = expanded ? 'Zjistit více' : 'Zobrazit méně';
+    });
+  });
 
 });

@@ -1,0 +1,44 @@
+# Po každém pushi do main: pokud je v style.css nová verze, vytvoří release
+# vX.Y.Z s instalačním ZIPem šablony (produkovany-theme-X.Y.Z.zip).
+name: Release ZIP
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Zjistit verzi
+        id: ver
+        run: |
+          VERSION=$(grep -m1 -E '^Version:' style.css | awk '{print $2}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Sestavit ZIP a vytvořit release
+        if: steps.ver.outputs.exists == 'false'
+        run: |
+          VERSION=${{ steps.ver.outputs.version }}
+          ZIP=produkovany-theme-$VERSION.zip
+          git archive --format=zip --prefix=produkovany-theme/ -o "$ZIP" HEAD
+          NOTES=$(awk -v v="### $VERSION" '$0==v{f=1;next} /^### /{f=0} f' README.md)
+          gh release create "v$VERSION" "$ZIP" \
+            --title "v$VERSION" \
+            --notes "${NOTES:-Verze $VERSION}" \
+            --target "$GITHUB_SHA"
+        env:
+          GH_TOKEN: ${{ github.token }}

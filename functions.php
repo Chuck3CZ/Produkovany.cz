@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.3.3' );
+define( 'PRODUKOVANY_VERSION', '1.4.1' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -137,6 +137,24 @@ function produkovany_register_cpt() {
         'supports'     => [ 'title', 'editor', 'thumbnail' ],
         'menu_icon'    => 'dashicons-clipboard',
     ]);
+
+    register_post_type( 'faq', [
+        'labels' => [
+            'name'          => __( 'Časté dotazy', 'produkovany' ),
+            'singular_name' => __( 'Dotaz', 'produkovany' ),
+            'add_new'       => __( 'Přidat dotaz', 'produkovany' ),
+            'add_new_item'  => __( 'Přidat nový dotaz', 'produkovany' ),
+            'edit_item'     => __( 'Upravit dotaz', 'produkovany' ),
+            'menu_name'     => __( 'FAQ', 'produkovany' ),
+        ],
+        'public'              => true,
+        'exclude_from_search' => true,
+        'show_in_rest'        => false, // klasický editor – odpověď je prostý text s limitem znaků
+        'has_archive'         => true,
+        'rewrite'             => [ 'slug' => 'faq', 'with_front' => false ],
+        'supports'            => [ 'title', 'page-attributes' ],
+        'menu_icon'           => 'dashicons-editor-help',
+    ]);
 }
 add_action( 'init', 'produkovany_register_cpt' );
 
@@ -182,6 +200,165 @@ function produkovany_save_kandidat_meta( $post_id ) {
         update_post_meta( $post_id, '_kandidat_povolani', sanitize_text_field( $_POST['kandidat_povolani'] ) );
 }
 add_action( 'save_post_kandidat', 'produkovany_save_kandidat_meta' );
+
+// ── Admin sloupec: Pořadí kandidáta (pro kontrolu a řazení v seznamu) ───────
+function produkovany_kandidat_columns( $columns ) {
+    $columns['kandidat_order'] = __( 'Pořadí', 'produkovany' );
+    return $columns;
+}
+add_filter( 'manage_kandidat_posts_columns', 'produkovany_kandidat_columns' );
+
+function produkovany_kandidat_column_content( $column, $post_id ) {
+    if ( $column === 'kandidat_order' ) {
+        $order = get_post_meta( $post_id, '_kandidat_order', true );
+        echo ( $order !== '' ) ? absint( $order ) : '—';
+    }
+}
+add_action( 'manage_kandidat_posts_custom_column', 'produkovany_kandidat_column_content', 10, 2 );
+
+function produkovany_kandidat_sortable_columns( $columns ) {
+    $columns['kandidat_order'] = 'kandidat_order';
+    return $columns;
+}
+add_filter( 'manage_edit-kandidat_sortable_columns', 'produkovany_kandidat_sortable_columns' );
+
+function produkovany_kandidat_orderby( $query ) {
+    if ( ! is_admin() || ! $query->is_main_query() ) return;
+    if ( $query->get( 'orderby' ) === 'kandidat_order' ) {
+        $query->set( 'meta_key', '_kandidat_order' );
+        $query->set( 'orderby', 'meta_value_num' );
+    }
+}
+add_action( 'pre_get_posts', 'produkovany_kandidat_orderby' );
+
+// ── Pořadí kandidátů pro navigaci předchozí/další na jejich stránce ─────────
+function produkovany_get_kandidat_siblings() {
+    static $ids = null;
+    if ( $ids === null ) {
+        $q = new WP_Query([
+            'post_type'      => 'kandidat',
+            'posts_per_page' => -1,
+            'meta_key'       => '_kandidat_order',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'ASC',
+            'fields'         => 'ids',
+        ]);
+        $ids = $q->posts;
+    }
+    return $ids;
+}
+
+// ── Stránka /aktuality/ – přehled všech aktualit ────────────────────────────
+function produkovany_aktuality_rewrite() {
+    add_rewrite_rule( '^aktuality/?$', 'index.php?produkovany_aktuality=1', 'top' );
+}
+add_action( 'init', 'produkovany_aktuality_rewrite' );
+
+function produkovany_aktuality_query_var( $vars ) {
+    $vars[] = 'produkovany_aktuality';
+    return $vars;
+}
+add_filter( 'query_vars', 'produkovany_aktuality_query_var' );
+
+// Stránka nesmí být brána jako hlavní stránka (is_home / is_front_page)
+function produkovany_aktuality_parse_query( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && $query->get( 'produkovany_aktuality' ) ) {
+        $query->is_home = false;
+        $query->set( 'posts_per_page', 1 );
+        $query->set( 'no_found_rows', true );
+    }
+}
+add_action( 'parse_query', 'produkovany_aktuality_parse_query' );
+
+// Nikdy nevracet 404 (ani když ještě nejsou žádné příspěvky)
+function produkovany_aktuality_no_404( $preempt, $query ) {
+    return $query->get( 'produkovany_aktuality' ) ? true : $preempt;
+}
+add_filter( 'pre_handle_404', 'produkovany_aktuality_no_404', 10, 2 );
+
+function produkovany_aktuality_template( $template ) {
+    if ( get_query_var( 'produkovany_aktuality' ) ) {
+        return get_template_directory() . '/aktuality.php';
+    }
+    return $template;
+}
+add_filter( 'template_include', 'produkovany_aktuality_template' );
+
+function produkovany_aktuality_title( $title ) {
+    if ( get_query_var( 'produkovany_aktuality' ) ) {
+        $title['title'] = __( 'Aktuality', 'produkovany' );
+    }
+    return $title;
+}
+add_filter( 'document_title_parts', 'produkovany_aktuality_title' );
+
+// ── FAQ: odpověď (max. 650 znaků) ───────────────────────────────────────────
+define( 'PRODUKOVANY_FAQ_MAX', 650 );
+
+// Po aktualizaci šablony obnoví permalinky, aby fungovala adresa /faq/
+function produkovany_maybe_flush_rewrites() {
+    if ( get_option( 'produkovany_rewrite_version' ) !== PRODUKOVANY_VERSION ) {
+        flush_rewrite_rules();
+        update_option( 'produkovany_rewrite_version', PRODUKOVANY_VERSION );
+    }
+}
+add_action( 'init', 'produkovany_maybe_flush_rewrites', 20 );
+
+function produkovany_faq_meta_box() {
+    add_meta_box(
+        'faq_answer',
+        __( 'Odpověď', 'produkovany' ),
+        'produkovany_faq_meta_html',
+        'faq',
+        'normal',
+        'high'
+    );
+}
+add_action( 'add_meta_boxes', 'produkovany_faq_meta_box' );
+
+function produkovany_faq_meta_html( $post ) {
+    $answer = wp_strip_all_tags( $post->post_content );
+    ?>
+    <textarea name="content" id="faq-answer" rows="8" maxlength="<?php echo PRODUKOVANY_FAQ_MAX; ?>" style="width:100%"><?php echo esc_textarea( $answer ); ?></textarea>
+    <p style="color:#888;font-size:12px;margin:6px 0 0">
+        <span id="faq-answer-count"><?php echo mb_strlen( $answer ); ?></span> / <?php echo PRODUKOVANY_FAQ_MAX; ?> znaků
+        &nbsp;·&nbsp; 💡 Otázka = název, pořadí = „Atributy stránky → Pořadí“ (menší číslo = výš)
+    </p>
+    <script>
+    (function () {
+        var t = document.getElementById('faq-answer'), c = document.getElementById('faq-answer-count');
+        t.addEventListener('input', function () { c.textContent = t.value.length; });
+    })();
+    </script>
+    <?php
+}
+
+// Pojistka na straně serveru – odpověď se uloží jako prostý text, nejvýše 650 znaků
+function produkovany_faq_limit_answer( $data ) {
+    if ( $data['post_type'] === 'faq' ) {
+        $answer = trim( wp_strip_all_tags( wp_unslash( $data['post_content'] ) ) );
+        $data['post_content'] = wp_slash( mb_substr( $answer, 0, PRODUKOVANY_FAQ_MAX ) );
+    }
+    return $data;
+}
+add_filter( 'wp_insert_post_data', 'produkovany_faq_limit_answer' );
+
+// Stránka /faq/ – všechny dotazy podle pořadí
+function produkovany_faq_archive_query( $query ) {
+    if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'faq' ) ) return;
+    $query->set( 'posts_per_page', -1 );
+    $query->set( 'orderby', [ 'menu_order' => 'ASC', 'date' => 'ASC' ] );
+}
+add_action( 'pre_get_posts', 'produkovany_faq_archive_query' );
+
+// Jednotlivé dotazy nemají vlastní stránku – přesměruj na /faq/
+function produkovany_faq_redirect_single() {
+    if ( is_singular( 'faq' ) ) {
+        wp_safe_redirect( get_post_type_archive_link( 'faq' ) . '#faq-' . get_queried_object_id(), 301 );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'produkovany_faq_redirect_single' );
 
 // ── Customizer ──────────────────────────────────────────────────────────────
 function produkovany_customizer( $wp_customize ) {
