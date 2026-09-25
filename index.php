@@ -213,6 +213,32 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════
+       FAQ – časté dotazy
+  ═══════════════════════════════════════════════ -->
+  <?php
+  $faq = new WP_Query([
+    'post_type'      => 'faq',
+    'posts_per_page' => -1,
+    'orderby'        => [ 'menu_order' => 'ASC', 'date' => 'ASC' ],
+  ]);
+  if ( $faq->have_posts() ) : ?>
+  <section class="faq-section section" id="faq">
+    <div class="container">
+      <?php produkovany_section_header('Časté dotazy', 'Na co se nás ptáte'); ?>
+
+      <div class="faq-list">
+        <?php while ( $faq->have_posts() ) : $faq->the_post(); ?>
+        <details class="faq-item">
+          <summary class="faq-question"><?php the_title(); ?></summary>
+          <div class="faq-answer"><?php the_content(); ?></div>
+        </details>
+        <?php endwhile; wp_reset_postdata(); ?>
+      </div>
+    </div>
+  </section>
+  <?php endif; ?>
+
+  <!-- ═══════════════════════════════════════════════
        KONTAKT
   ═══════════════════════════════════════════════ -->
   <section class="contact-section section" id="kontakt">

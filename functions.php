@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.3.3' );
+define( 'PRODUKOVANY_VERSION', '1.3.4' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -136,6 +136,22 @@ function produkovany_register_cpt() {
         'show_in_rest' => true,
         'supports'     => [ 'title', 'editor', 'thumbnail' ],
         'menu_icon'    => 'dashicons-clipboard',
+    ]);
+
+    register_post_type( 'faq', [
+        'labels' => [
+            'name'          => __( 'Časté dotazy', 'produkovany' ),
+            'singular_name' => __( 'Dotaz', 'produkovany' ),
+            'add_new'       => __( 'Přidat dotaz', 'produkovany' ),
+            'add_new_item'  => __( 'Přidat nový dotaz', 'produkovany' ),
+            'edit_item'     => __( 'Upravit dotaz', 'produkovany' ),
+            'menu_name'     => __( 'FAQ', 'produkovany' ),
+        ],
+        'public'       => false,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'supports'     => [ 'title', 'editor', 'page-attributes' ],
+        'menu_icon'    => 'dashicons-editor-help',
     ]);
 }
 add_action( 'init', 'produkovany_register_cpt' );

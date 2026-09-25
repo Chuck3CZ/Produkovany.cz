@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Scroll animace (Intersection Observer) ──────────
   const animTargets = document.querySelectorAll(
-    '.pillar-card, .candidate-card, .news-card, .stat-box, .contact-item'
+    '.pillar-card, .candidate-card, .news-card, .stat-box, .contact-item, .faq-item'
   );
 
   if ('IntersectionObserver' in window) {

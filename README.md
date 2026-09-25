@@ -21,6 +21,12 @@ Volební šablona pro kandidátku **ProDukovany** – komunální volby 2026.
 - V obsahu napiš krátký popis (zobrazí se jako excerpt)
 - Meta: `_pillar_icon` = emoji ikona, `_pillar_color` = CSS barva
 
+### Časté dotazy (`faq`)
+- Přidat přes: **FAQ → Přidat dotaz**
+- Název = otázka, obsah = odpověď (zobrazí se po rozkliknutí)
+- Pořadí: pole **Pořadí** v panelu „Atributy stránky" (menší číslo = výš), jinak podle data přidání
+- Sekce se zobrazí nad kontaktem jen pokud existuje alespoň jeden publikovaný dotaz
+
 ## Přizpůsobení (Customizer)
 
 **Vzhled → Přizpůsobit:**
@@ -62,6 +68,11 @@ produkovany-theme/
 ```
 
 ## Changelog
+
+### 1.3.4
+- Nová záložka **FAQ** v administraci (custom post type `faq`)
+- Sekce „Časté dotazy" (`#faq`) nad kontaktem — otázky jako rozbalovací akordeon, odpověď se ukáže po kliknutí
+- Pořadí otázek přes pole „Pořadí" (Atributy stránky); bez dotazů se sekce nezobrazí
 
 ### 1.2.9
 - Pole E-mail odstraněno z formuláře — zpráva dorazí i bez něj
