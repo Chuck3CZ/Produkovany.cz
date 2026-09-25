@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.4.0' );
+define( 'PRODUKOVANY_VERSION', '1.4.1' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -247,6 +247,50 @@ function produkovany_get_kandidat_siblings() {
     }
     return $ids;
 }
+
+// ── Stránka /aktuality/ – přehled všech aktualit ────────────────────────────
+function produkovany_aktuality_rewrite() {
+    add_rewrite_rule( '^aktuality/?$', 'index.php?produkovany_aktuality=1', 'top' );
+}
+add_action( 'init', 'produkovany_aktuality_rewrite' );
+
+function produkovany_aktuality_query_var( $vars ) {
+    $vars[] = 'produkovany_aktuality';
+    return $vars;
+}
+add_filter( 'query_vars', 'produkovany_aktuality_query_var' );
+
+// Stránka nesmí být brána jako hlavní stránka (is_home / is_front_page)
+function produkovany_aktuality_parse_query( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && $query->get( 'produkovany_aktuality' ) ) {
+        $query->is_home = false;
+        $query->set( 'posts_per_page', 1 );
+        $query->set( 'no_found_rows', true );
+    }
+}
+add_action( 'parse_query', 'produkovany_aktuality_parse_query' );
+
+// Nikdy nevracet 404 (ani když ještě nejsou žádné příspěvky)
+function produkovany_aktuality_no_404( $preempt, $query ) {
+    return $query->get( 'produkovany_aktuality' ) ? true : $preempt;
+}
+add_filter( 'pre_handle_404', 'produkovany_aktuality_no_404', 10, 2 );
+
+function produkovany_aktuality_template( $template ) {
+    if ( get_query_var( 'produkovany_aktuality' ) ) {
+        return get_template_directory() . '/aktuality.php';
+    }
+    return $template;
+}
+add_filter( 'template_include', 'produkovany_aktuality_template' );
+
+function produkovany_aktuality_title( $title ) {
+    if ( get_query_var( 'produkovany_aktuality' ) ) {
+        $title['title'] = __( 'Aktuality', 'produkovany' );
+    }
+    return $title;
+}
+add_filter( 'document_title_parts', 'produkovany_aktuality_title' );
 
 // ── FAQ: odpověď (max. 650 znaků) ───────────────────────────────────────────
 define( 'PRODUKOVANY_FAQ_MAX', 650 );

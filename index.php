@@ -277,29 +277,14 @@
         ]);
         if ( $news->have_posts() ) :
           while ( $news->have_posts() ) : $news->the_post();
-            $cats = get_the_category();
-            $cat_name = $cats ? $cats[0]->name : 'Aktuality';
+            get_template_part( 'template-parts/news-card' );
+          endwhile; wp_reset_postdata();
+        endif;
         ?>
-        <article class="news-card">
-          <div class="news-thumb">
-            <?php if ( has_post_thumbnail() ) : ?>
-              <?php the_post_thumbnail('produkovany-thumb'); ?>
-            <?php else : ?>
-              <span aria-hidden="true">📰</span>
-            <?php endif; ?>
-          </div>
-          <div class="news-body">
-            <div class="news-tag"><?php echo esc_html($cat_name); ?></div>
-            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-            <p><?php the_excerpt(); ?></p>
-            <div class="news-date"><?php echo get_the_date('j. F Y'); ?></div>
-          </div>
-        </article>
-        <?php endwhile; wp_reset_postdata(); endif; ?>
       </div>
 
       <div style="text-align:center; margin-top:40px">
-        <a href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>" class="btn btn-outline-dark">
+        <a href="<?php echo esc_url(home_url('/aktuality/')); ?>" class="btn btn-outline-dark">
           <?php _e('Všechny aktuality', 'produkovany'); ?> →
         </a>
       </div>

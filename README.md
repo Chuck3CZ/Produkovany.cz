@@ -61,6 +61,9 @@ produkovany-theme/
 ├── single.php         # Jednotlivý příspěvek
 ├── page.php           # Statická stránka
 ├── archive.php        # Archiv příspěvků
+├── archive-faq.php    # Stránka /faq/
+├── aktuality.php      # Stránka /aktuality/
+├── template-parts/news-card.php  # Karta aktuality
 ├── assets/
 │   ├── css/main.css   # Všechny styly
 │   └── js/main.js     # Interaktivita
@@ -68,6 +71,11 @@ produkovany-theme/
 ```
 
 ## Changelog
+
+### 1.4.1
+- Nová stránka **/aktuality/** se všemi aktualitami (stejné karty jako na hlavní stránce), s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"
+- Tlačítko „Všechny aktuality" na hlavní stránce nyní vede na /aktuality/ (dříve kvůli nenastavené stránce příspěvků odkazovalo na náhodný článek)
+- Karta aktuality vyčleněna do `template-parts/news-card.php` – hlavní stránka i přehled používají stejný kód
 
 ### 1.4.0
 - FAQ přesunuto na samostatnou stránku **/faq/** (šablona `archive-faq.php`) s hlavičkou, patičkou a odkazem „← Zpět na hlavní stránku"

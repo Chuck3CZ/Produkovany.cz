@@ -445,7 +445,9 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
 }
 
 /* ── FAQ (stránka /faq/) ── */
-.page-faq    { background: #F0F4F8; padding: 32px 0 90px; }
+.page-faq,
+.page-aktuality { background: #F0F4F8; padding: 32px 0 90px; }
+.page-aktuality .news-grid { margin-top: 0; }
 .back-link {
   display: inline-flex; align-items: center; gap: 6px;
   margin-bottom: 36px;
@@ -692,7 +694,7 @@ h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.15; }
   /* FAQ */
   .faq-question   { padding: 16px 18px; font-size: 1rem; }
   .faq-answer     { padding: 0 18px 16px; font-size: 14px; }
-  .page-faq       { padding: 20px 0 60px; }
+  .page-faq, .page-aktuality { padding: 20px 0 60px; }
   .back-link      { margin-bottom: 24px; }
 
   /* Kontakt */
