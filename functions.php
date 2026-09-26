@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.4.4' );
+define( 'PRODUKOVANY_VERSION', '1.4.5' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -442,6 +442,9 @@ function produkovany_section_header( $label, $title, $subtitle = '' ) {
     }
 }
 
+// Maximální délka zprávy v kontaktním formuláři
+define( 'PRODUKOVANY_MESSAGE_MAX', 400 );
+
 // ── Kontaktní formulář – zpracování ─────────────────────────────────────────
 function produkovany_handle_contact() {
 
@@ -464,6 +467,7 @@ function produkovany_handle_contact() {
     // Sanitace vstupů
     $name    = sanitize_text_field( wp_unslash( $_POST['cf_name']    ?? '' ) );
     $message = sanitize_textarea_field( wp_unslash( $_POST['cf_message'] ?? '' ) );
+    $message = mb_substr( $message, 0, PRODUKOVANY_MESSAGE_MAX );
     $name    = $name ?: 'Anonym';
 
     // Povinná pouze zpráva

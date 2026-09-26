@@ -100,6 +100,19 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(updateCountdown, 60000);
   }
 
+  // ── Počítadlo znaků ve zprávě kontaktního formuláře ─
+  const msg      = document.getElementById('cf-message');
+  const msgCount = document.getElementById('cf-message-count');
+  if (msg && msgCount) {
+    const max = parseInt(msg.getAttribute('maxlength'), 10);
+    const updateCount = function () {
+      msgCount.textContent = msg.value.length;
+      msgCount.parentNode.classList.toggle('is-full', msg.value.length >= max);
+    };
+    msg.addEventListener('input', updateCount);
+    updateCount();
+  }
+
   // ── Accordion pro body volebního programu ───────────
   document.querySelectorAll('.program-toggle').forEach(function (btn) {
     btn.addEventListener('click', function () {
