@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.4.5' );
+define( 'PRODUKOVANY_VERSION', '1.4.6' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
