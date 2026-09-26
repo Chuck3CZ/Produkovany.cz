@@ -375,8 +375,9 @@
           </div>
           <div class="form-group">
             <label for="cf-message"><?php _e('Zpráva', 'produkovany'); ?></label>
-            <textarea id="cf-message" name="cf_message"
+            <textarea id="cf-message" name="cf_message" maxlength="<?php echo PRODUKOVANY_MESSAGE_MAX; ?>"
               placeholder="Váš vzkaz nebo nápad co by se mohlo zlepšit..." required></textarea>
+            <div class="form-counter"><span id="cf-message-count">0</span> / <?php echo PRODUKOVANY_MESSAGE_MAX; ?> znaků</div>
           </div>
           <?php
           // Matematická captcha — vygeneruj dvě čísla a ulož součet do session

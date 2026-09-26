@@ -80,6 +80,10 @@ v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
 
 ## Changelog
 
+### 1.4.6
+- Kontaktní formulář: při dosažení limitu 400 znaků se pole zprávy orámuje červeně (spolu s počítadlem)
+### 1.4.5
+- Kontaktní formulář: zpráva omezena na max. 400 znaků (`PRODUKOVANY_MESSAGE_MAX`), pod polem počítadlo (u limitu zčervená), limit hlídá i server
 ### 1.4.4
 - FAQ: větší a lépe čitelný text odpovědí (17 px na PC, 16 px na mobilu, tmavší šedá)
 ### 1.4.3
