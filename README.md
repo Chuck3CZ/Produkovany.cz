@@ -80,6 +80,8 @@ v `style.css` (a `PRODUKOVANY_VERSION` ve `functions.php`).
 
 ## Changelog
 
+### 1.4.7
+- FAQ (administrace): limit otázky snížen na 400 znaků, počítadlo „0 / 400 znaků“ a pod ním text „Prosíme dodržte limit počtu znaků na jedno téma otázky“
 ### 1.4.6
 - Kontaktní formulář: při dosažení limitu 400 znaků se pole zprávy orámuje červeně (spolu s počítadlem)
 ### 1.4.5
