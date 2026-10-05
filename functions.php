@@ -8,7 +8,7 @@
  * 1.0.0 – Základní verze šablony.
  */
 
-define( 'PRODUKOVANY_VERSION', '1.4.7' );
+define( 'PRODUKOVANY_VERSION', '1.4.8' );
 
 // ── Základní nastavení tématu ───────────────────────────────────────────────
 function produkovany_setup() {
@@ -149,7 +149,7 @@ function produkovany_register_cpt() {
         ],
         'public'              => true,
         'exclude_from_search' => true,
-        'show_in_rest'        => false, // klasický editor – kvůli limitu znaků u otázky
+        'show_in_rest'        => false, // klasický editor
         'has_archive'         => true,
         'rewrite'             => [ 'slug' => 'faq', 'with_front' => false ],
         'supports'            => [ 'title', 'editor', 'page-attributes' ],
@@ -292,9 +292,6 @@ function produkovany_aktuality_title( $title ) {
 }
 add_filter( 'document_title_parts', 'produkovany_aktuality_title' );
 
-// ── FAQ: otázka (název) max. 400 znaků, odpověď bez omezení ────────────────
-define( 'PRODUKOVANY_FAQ_MAX', 400 );
-
 // Po aktualizaci šablony obnoví permalinky, aby fungovala adresa /faq/
 function produkovany_maybe_flush_rewrites() {
     if ( get_option( 'produkovany_rewrite_version' ) !== PRODUKOVANY_VERSION ) {
@@ -303,45 +300,6 @@ function produkovany_maybe_flush_rewrites() {
     }
 }
 add_action( 'init', 'produkovany_maybe_flush_rewrites', 20 );
-
-// Počítadlo znaků a limit u pole otázky v administraci
-function produkovany_faq_title_limit_js() {
-    $screen = get_current_screen();
-    if ( ! $screen || $screen->post_type !== 'faq' || $screen->base !== 'post' ) return;
-    ?>
-    <script>
-    (function () {
-        var t = document.getElementById('title');
-        if (!t) return;
-        t.setAttribute('maxlength', <?php echo PRODUKOVANY_FAQ_MAX; ?>);
-        var c = document.createElement('p');
-        c.style.cssText = 'color:#888;font-size:12px;margin:6px 0 0';
-        t.parentNode.parentNode.insertBefore(c, t.parentNode.nextSibling);
-        var n = document.createElement('p');
-        n.style.cssText = 'color:#888;font-size:12px;margin:2px 0 0';
-        n.textContent = 'Prosíme dodržte limit počtu znaků na jedno téma otázky';
-        c.parentNode.insertBefore(n, c.nextSibling);
-        function update() { c.textContent = t.value.length + ' / <?php echo PRODUKOVANY_FAQ_MAX; ?> znaků'; }
-        t.addEventListener('input', update);
-        update();
-    })();
-    </script>
-    <?php
-}
-add_action( 'admin_footer-post.php',     'produkovany_faq_title_limit_js' );
-add_action( 'admin_footer-post-new.php', 'produkovany_faq_title_limit_js' );
-
-// Pojistka na straně serveru – otázka se zkrátí na 400 znaků
-function produkovany_faq_limit_title( $data ) {
-    if ( $data['post_type'] === 'faq' ) {
-        $title = wp_unslash( $data['post_title'] );
-        if ( mb_strlen( $title ) > PRODUKOVANY_FAQ_MAX ) {
-            $data['post_title'] = wp_slash( mb_substr( $title, 0, PRODUKOVANY_FAQ_MAX ) );
-        }
-    }
-    return $data;
-}
-add_filter( 'wp_insert_post_data', 'produkovany_faq_limit_title' );
 
 // Stránka /faq/ – všechny dotazy podle pořadí
 function produkovany_faq_archive_query( $query ) {

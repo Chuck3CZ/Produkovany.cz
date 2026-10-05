@@ -378,6 +378,7 @@
             <textarea id="cf-message" name="cf_message" maxlength="<?php echo PRODUKOVANY_MESSAGE_MAX; ?>"
               placeholder="Váš vzkaz nebo nápad co by se mohlo zlepšit..." required></textarea>
             <div class="form-counter"><span id="cf-message-count">0</span> / <?php echo PRODUKOVANY_MESSAGE_MAX; ?> znaků</div>
+            <div class="form-note"><?php _e('Prosíme dodržte limit počtu znaků na jedno téma otázky', 'produkovany'); ?></div>
           </div>
           <?php
           // Matematická captcha — vygeneruj dvě čísla a ulož součet do session
